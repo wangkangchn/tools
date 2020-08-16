@@ -37,6 +37,18 @@ static inline void *get_disable_buf(void) { return plog->activite == 1 ? plog->b
 static inline int change_buf_state(void) { return plog->activite == 1 ? 2 : 1; }
 
 /**
+ * get_file_size - 获取文件大小
+ * @filename:   待获取大小的文件名字
+ * @return:     成功返回文件大小, 失败返回-1
+ */
+unsigned long get_file_size(const char *filename)  
+{  
+    struct stat buf;  
+
+    return stat(filename, &buf) == 0 ? (unsigned long)buf.st_size : -1;
+} 
+
+/**
  * write_file - 向文件写入缓冲区的内容
  * @plog:	日志参数
  * @return: 无
@@ -63,6 +75,8 @@ static void write_file(struct log *plog)
         close(fd);	
         free(buf);	 
 
+        /* 检查文件大小是否超过指定的最大值, 超过则新建文件 */
+        get_file_size(plog->log_fname)   
 	} else {
         printf("Open %s failed.\n", plog->log_fname);    
     }
