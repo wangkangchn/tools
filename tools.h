@@ -9,22 +9,12 @@ Copyright © wangk <wangkangchn@163.com>
 #ifndef __MY_USER_TOOLS_H__
 #define __MY_USER_TOOLS_H__
 
-
+// #ifdef __KERNEL__
 /* 标记 */
 #define LAB(name)               lab_ ## name    
 
 /* 数组大小 */
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0])) 
-
-
-/* 验证指针是非为NULL */
-#define CHECK_PTR_IS_EXIST(ptr) do { \
-    if (!ptr) {   \
-        ret = -ENOMEM;  \
-        pr_err("为 "#ptr" 分配空间失败.\n");  \
-        goto LAB(return);\
-    } \
-} while(0)
 
 /* 检查值是否小于 0 */
 #define IS_LESS_THEN_ZERO(val, msg, ...) do { \
@@ -34,16 +24,15 @@ Copyright © wangk <wangkangchn@163.com>
     }   \
 } while (0)
 
-/* 分配设备缓冲区 */
-#define calloc_buf(buf, size) do {    \
-    buf = calloc(1, size);   \
-    CHECK_PTR_IS_EXIST(buf);  \
-} while(0)
+/* 分配设备缓冲区, 并对返回指针进行断言 */
+#include <assert.h>
+#define calloc_buf(num, type) ({            \
+    type *_buf = calloc(num, sizeof(type)); \
+    assert(_buf);                           \
+    _buf;})
 
 /* 释放缓冲区缓冲区 */
-#define free_buf(buf) do {    \
-    free(buf); buf = NULL;   \
-} while(0)
+#define free_buf(buf) ({ free(buf); buf = NULL; })
 
 #endif // !__MY_USER_TOOLS_H__
 

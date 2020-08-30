@@ -220,7 +220,7 @@ static inline void list_del(struct list_head *entry) {
 
 #else
 extern void __list_del_entry(struct list_head *entry);
-extern void list_del(struct list_head *entry);
+extern void list_del(struct list_head *entry); 
 #endif
 
 /**

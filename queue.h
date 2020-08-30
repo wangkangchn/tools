@@ -13,6 +13,17 @@ Copyright © wkangk <wangkangchn@163.com>
 				其中:
 					max: 队列的最大长度
 				3. xxx_mutex 为带互斥锁操作
+			e.g.
+				DEFINE_ELEMENT_TYPE(int, queue);
+
+				const int MAX = 100;
+
+				int main(int argc, char *argv[])
+				{
+					struct queue *Q = calloc(1, sizeof(struct queue));
+					printf("%d\n", init(Q, MAX));
+					return 0;
+				}
 时间	   	: 2020-08-23 15:29
 ***************************************************************/
 #ifndef __WKANGK_QUEUE_H__

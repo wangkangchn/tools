@@ -13,6 +13,17 @@ Copyright © wkangk <wangkangchn@163.com>
 				其中:
 					max: 栈的最大长度
 				3. xxx_mutex 为带互斥锁操作
+			e.g.
+				DEFINE_ELEMENT_TYPE(int, stack);
+
+				const int MAX = 100;
+
+				int main(int argc, char *argv[])
+				{
+					struct stack *S = calloc(1, sizeof(struct stack));
+					printf("%d\n", init(S, MAX));
+					return 0;
+				}
 时间	   	: 2020-08-23 17:16
 ***************************************************************/
 #ifndef __WKANGK_STACK_H__
