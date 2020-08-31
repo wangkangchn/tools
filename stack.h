@@ -48,16 +48,16 @@ Copyright © wkangk <wangkangchn@163.com>
 		S->data && !pthread_mutex_init(&S->mutex, NULL);	})
 
 /* size - 获取栈长度*/
-#define size(S) 		S->top + 1
+#define size(S) 		({ S->top + 1 })
 
 /* is_empty - 判断栈是否为空 */
-#define is_empty(S) 	S->top < 0
+#define is_empty(S) 	({ S->top < 0 })
 
 /* is_full - 判断栈是否为满 */
-#define is_full(S) 		S->top == S->max_length
+#define is_full(S) 		({ S->top == S->max_length })
 
 /* pop - 弹栈 */
-#define pop(S) 			S->data[S->top--]
+#define pop(S) 			({ S->data[S->top--] })
 
 /* push - 入栈 */
 #define push(S, x) ({ 				\
