@@ -31,19 +31,18 @@ Copyright © wkangk <wangkangchn@163.com>
 #include <stdlib.h>
 #include <pthread.h>
 
-#define DEFINE_ELEMENT_TYPE(type, name)	\
-	struct name							\
-	{									\
+#define DEFINE_ELEMENT_TYPE(type, name)	({	\
+	typedef struct {					\
 		pthread_mutex_t mutex;			\
 		unsigned int max_length; 		\
 		unsigned int head, tail;		\
 		unsigned int count;				\
 		type *data;						\
-	}
+	} name;})
 
 /* 成功返回1, 失败返回0 */
 #define init(Q, max) ({									\
-        Q->max_length = max;							\
+        Q->max_length = (int)max;						\
 		Q->head = Q->tail = Q->count = 0;				\
         Q->data = calloc(max, sizeof(*Q->data) * max);  \
 		Q->data && !pthread_mutex_init(&Q->mutex, NULL);	})
