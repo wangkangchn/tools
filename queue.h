@@ -20,7 +20,7 @@ Copyright © wkangk <wangkangchn@163.com>
 
 				int main(int argc, char *argv[])
 				{
-					struct queue *Q = calloc(1, sizeof(struct queue));
+					queue *Q = calloc(1, sizeof(queue));
 					printf("%d\n", init(Q, MAX));
 					return 0;
 				}
@@ -31,14 +31,14 @@ Copyright © wkangk <wangkangchn@163.com>
 #include <stdlib.h>
 #include <pthread.h>
 
-#define DEFINE_ELEMENT_TYPE(type, name)	({	\
-	typedef struct {					\
+#define DEFINE_ELEMENT_TYPE(type, name)		\
+	typedef struct name {					\
 		pthread_mutex_t mutex;			\
 		unsigned int max_length; 		\
 		unsigned int head, tail;		\
 		unsigned int count;				\
 		type *data;						\
-	} name;})
+	} name
 
 /* 成功返回1, 失败返回0 */
 #define init(Q, max) ({									\
