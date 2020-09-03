@@ -32,19 +32,19 @@ Copyright © wkangk <wangkangchn@163.com>
 #include <pthread.h>
 
 #define DEFINE_ELEMENT_TYPE(type, name)	\
-	struct name							\
+	typedef struct name					\
 	{									\
 		pthread_mutex_t mutex;			\
 		unsigned int max_length; 		\
 		int top;						\
 		type *data;						\
-	}
+	} name
 
 /* 成功返回1, 失败返回0 */
 #define init(S, max) ({									\
         S->max_length = max;							\
 		S->top = -1;									\
-        S->data = calloc(max, sizeof(*S->data) * max);  \
+        S->data = calloc(max, sizeof(*S->data));  \
 		S->data && !pthread_mutex_init(&S->mutex, NULL);	})
 
 /* size - 获取栈长度*/
@@ -67,7 +67,7 @@ Copyright © wkangk <wangkangchn@163.com>
 /* clear - 清空缓冲区 */
 #define clear(S) 		({				\
 	pthread_mutex_destroy(&S->mutex);	\
-	free(S->data);	})
+	free(S->data);})
 
 /* pop_mutex - 弹栈(带互斥锁) */
 #define pop_mutex(S) 	({					\

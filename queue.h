@@ -44,7 +44,7 @@ Copyright © wkangk <wangkangchn@163.com>
 #define init(Q, max) ({									\
         Q->max_length = (int)max;						\
 		Q->head = Q->tail = Q->count = 0;				\
-        Q->data = calloc(max, sizeof(*Q->data) * max);  \
+        Q->data = calloc(max, sizeof(*Q->data));  \
 		Q->data && !pthread_mutex_init(&Q->mutex, NULL);	})
 
 /* size - 获取队列长度*/
@@ -68,15 +68,15 @@ Copyright © wkangk <wangkangchn@163.com>
 
 /* push - 向队列中添加元素x */
 #define push(Q, x) ({ 						\
-	const typeof( x ) __x = (x);			\
+	typeof( *Q->data ) __x = (x);			\
 	Q->data[Q->tail] = __x; 				\
 	Q->tail = ++Q->tail % Q->max_length;	\
 	++Q->count;})
 
-/* clear - 清空缓冲区 */
+/* clear - 清空缓冲区, 释放指针 */
 #define clear(Q) ({						\
 	pthread_mutex_destroy(&Q->mutex);	\
-	free(Q->data); })
+	free(Q->data);})
 
 /* pop_mutex - 弹出队首元素(带互斥锁) */
 #define pop_mutex(Q) 	({				\

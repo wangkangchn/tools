@@ -21,6 +21,7 @@ Copyright © wangk <wangkangchn@163.com>
  *          #include "log.h"
  *      (2) prl_xxx族创建的日志文件名并非传入的日志名, 会在其上加入编号, 
  *      最终的形式为 prefix _num suffix
+ *      (3) SET_DEFAULT_LEVEL(level) 要在main函数中使用, 在全局使用会报错
  * 
  * 参数说明:
  *      MODULENAME:             模块名字
@@ -58,7 +59,7 @@ enum log_level {
 /* the macro to set debug level, you should call it 
  * once in the files you need use debug system*/
 static enum log_level default_level = CONSOLE_LOGLEVEL_DEBUG;
-#define SET_DEFAULT_LEVEL(level)  (default_level = level)
+#define SET_DEFAULT_LEVEL(level)  ({ default_level = level; })  /* 这个要在main函数中使用 */
 
 #define PREFIX_FORMAT                           "[%s File: %s, Func: %s, Line: %d]"
 #define SUFFIX_FORMAT(color, level, fmt)        "[\033[40m"color""level"\033[0m]: "color""fmt"\033[0m" 
