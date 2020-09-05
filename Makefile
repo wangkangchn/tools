@@ -13,7 +13,7 @@ signo:
 	${CC} test_signo.c -o app_signo
 
 color:
-	${CC} test_color.c -o app_color
+	${CC} test_color.c -o app_color 
 
 filesize:
 	${CC} test_filesize.c -o app_filesize
