@@ -65,9 +65,7 @@ Copyright © wkangk <wangkangchn@163.com>
 `b Note:
 `b    x, y 中不能使用 ++ --(自增自减运算符) 
  */
-#define max(x, y) ({            \
-    typeof( (x) ) __y = (y);    \
-    (x) >= __y ? (x) : __y; })
+#define max(x, y) ({ (x) >= (y) ? (x) : (y); })
 
 /**
  * trace - 按顺序输出数组元素
@@ -75,9 +73,9 @@ Copyright © wkangk <wangkangchn@163.com>
  * @num:    数组元素个数
  */
 #define trace(A, num) ({    \
-    for (int i = 0; i < num; ++i) { \
+    for (int i = 0; i < (num); ++i) { \
         if (i > 0) printf(" ");     \
-        printf("%d", A[i]);         \
+        printf("%d", (A)[i]);         \
     }                               \
     printf("\n");})
 
@@ -85,11 +83,12 @@ Copyright © wkangk <wangkangchn@163.com>
             时间测试
 e.g.
 double start = START();
-printf( "%f seconds\n", FINISH(start));
+...
+FINISH(start);
  */
 #include <time.h>
 #define START()         ({ clock(); })
-#define FINISH(start)   ({ (double)( clock() - (start) ) / CLOCKS_PER_SEC; })
+#define FINISH(start)   ({ printf( "%.9f seconds\n", (double)( clock() - (start) ) / CLOCKS_PER_SEC); })
 
 #endif // ! __MY_USER_TOOLS_H__
 
