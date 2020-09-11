@@ -3,7 +3,7 @@ Copyright © wkangk <wangkangchn@163.com>
 文件名		: pqueue.h
 作者	  	: wkangk <wangkangchn@163.com>
 版本	   	: v1.0
-描述	   	: 优先级队列(最大堆实现, 未做树的平衡)
+描述	   	: 优先级队列(最大堆实现)
         使用方法:
 				1. 使用 DEFINE_PQUEUE_ELEMENT_TYPE(type, name) 定义使用的队列元素类型和优先级队列名字
 				其中:
