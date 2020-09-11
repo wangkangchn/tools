@@ -5,7 +5,7 @@ Copyright © wkangk <wangkangchn@163.com>
 版本	   	: v1.0
 描述	   	: 数组栈
 			使用方法:
-				1. 使用 DEFINE_ELEMENT_TYPE(type, name) 定义使用的栈元素类型
+				1. 使用 DEFINE_STACK_ELEMENT_TYPE(type, name) 定义使用的栈元素类型
 				其中:
 					type: 指定栈数组类型
 					name: 结构体名称
@@ -14,7 +14,7 @@ Copyright © wkangk <wangkangchn@163.com>
 					max: 栈的最大长度
 				3. xxx_mutex 为带互斥锁操作
 			e.g.
-				DEFINE_ELEMENT_TYPE(int, stack);
+				DEFINE_STACK_ELEMENT_TYPE(int, stack);
 
 				const int MAX = 100;
 
@@ -31,7 +31,7 @@ Copyright © wkangk <wangkangchn@163.com>
 #include <stdlib.h>
 #include <pthread.h>
 
-#define DEFINE_ELEMENT_TYPE(type, name)	\
+#define DEFINE_STACK_ELEMENT_TYPE(type, name)	\
 	typedef struct name					\
 	{									\
 		pthread_mutex_t mutex;			\
@@ -41,46 +41,46 @@ Copyright © wkangk <wangkangchn@163.com>
 	} name
 
 /* 成功返回1, 失败返回0 */
-#define init(S, max) ({									\
-        S->max_length = max;							\
-		S->top = -1;									\
-        S->data = calloc(max, sizeof(*S->data));  \
-		S->data && !pthread_mutex_init(&S->mutex, NULL);	})
+#define sinit(S, max) ({									\
+        (S)->max_length = (int)(max);							\
+		(S)->top = -1;									\
+        (S)->data = calloc((max), sizeof(*( (S)->data) ));  \
+		(S)->data && !pthread_mutex_init(&( (S)->mutex ), NULL);	})
 
 /* size - 获取栈长度*/
-#define size(S) 		({ S->top + 1 })
+#define ssize(S) 		({ (S)->top + 1; })
 
 /* is_empty - 判断栈是否为空 */
-#define is_empty(S) 	({ S->top < 0 })
+#define sis_empty(S) 	({ (S)->top < 0; })
 
 /* is_full - 判断栈是否为满 */
-#define is_full(S) 		({ S->top == S->max_length })
+#define sis_full(S) 		({ (S)->top == (S)->max_length; })
 
 /* pop - 弹栈 */
-#define pop(S) 			({ S->data[S->top--] })
+#define spop(S) 			({ (S)->data[(S)->top--]; })
 
 /* push - 入栈 */
-#define push(S, x) ({ 				\
+#define spush(S, x) ({ 				\
 	const typeof( x ) __x = (x);	\
-	S->data[++S->top] = __x;	})
+	(S)->data[++( (S)->top )] = __x;	})
 
 /* clear - 清空缓冲区 */
-#define clear(S) 		({				\
-	pthread_mutex_destroy(&S->mutex);	\
-	free(S->data);})
+#define sclear(S) 		({				\
+	pthread_mutex_destroy(&( (S)->mutex ));	\
+	free((S)->data);})
 
 /* pop_mutex - 弹栈(带互斥锁) */
-#define pop_mutex(S) 	({					\
-		typeof( *S->data ) __x;				\
-		pthread_mutex_lock(&S->mutex);		\
-		__x = pop(S);						\
-		pthread_mutex_unlock(&S->mutex);	\
+#define spop_mutex(S) 	({					\
+		typeof( *( (S)->data ) ) __x;				\
+		pthread_mutex_lock(&(S)->mutex);		\
+		__x = pop( (S) );						\
+		pthread_mutex_unlock(&(S)->mutex);	\
 		__x;	})
 
 /* push_mutex - 入栈(带互斥锁) */
-#define push_mutex(S, x) ({ 		\
-	pthread_mutex_lock(&S->mutex);	\
-	push(S, x);						\
-	pthread_mutex_unlock(&S->mutex);	})
+#define spush_mutex(S, x) ({ 		\
+	pthread_mutex_lock(&( (S)->mutex ));	\
+	push( (S), x );						\
+	pthread_mutex_unlock(&( (S)->mutex ));	})
 
 #endif // !__WKANGK_STACK_H__

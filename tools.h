@@ -28,7 +28,7 @@ Copyright © wkangk <wangkangchn@163.com>
 #include <stdlib.h>
 #include <assert.h>
 #define calloc_buf(num, type) ({            \
-    type *_buf = calloc( (num), sizeof( type )); \
+    type *_buf = (type *)calloc( (num), sizeof( type )); \
     assert(_buf);                           \
     _buf;})
 
@@ -57,9 +57,8 @@ Copyright © wkangk <wangkangchn@163.com>
     (*__x) ^= (*__y); })
 */
 #define swap(x, y)  ({              \
-    typeof( (x) ) __y = (y);        \
     typeof( *(y) ) __temp = *(x);   \
-    *(x) = *__y; *__y = __temp; })
+    *(x) = *(y); *(y) = __temp; })
 
 /* 计算两者的大值
 `b Note:
@@ -72,10 +71,10 @@ Copyright © wkangk <wangkangchn@163.com>
  * @A:      待排序数组	
  * @num:    数组元素个数
  */
-#define trace(A, num) ({    \
+#define trace(A, num, msg, ...) ({    \
     for (int i = 0; i < (num); ++i) { \
         if (i > 0) printf(" ");     \
-        printf("%d", (A)[i]);         \
+        printf(msg, ##__VA_ARGS__);         \
     }                               \
     printf("\n");})
 
