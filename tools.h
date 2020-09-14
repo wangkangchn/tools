@@ -60,11 +60,12 @@ Copyright © wkangk <wangkangchn@163.com>
     typeof( *(y) ) __temp = *(x);   \
     *(x) = *(y); *(y) = __temp; })
 
-/* 计算两者的大值
+/* 计算两者的大/小值
 `b Note:
 `b    x, y 中不能使用 ++ --(自增自减运算符) 
  */
 #define max(x, y) ({ (x) >= (y) ? (x) : (y); })
+#define min(x, y) ({ (x) <= (y) ? (x) : (y); })
 
 /**
  * trace - 按顺序输出数组元素
