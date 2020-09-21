@@ -1,0 +1,4 @@
+
+sudo make clean
+sudo make list_demo
+sudo ./app_list_demo

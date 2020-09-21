@@ -37,7 +37,7 @@ Copyright © wkangk <wangkangchn@163.com>
                 pqpop(Q);
 
                 pqclear(Q);
-                free_buf(Q);
+                free(Q);
                 return 0;
             }
 时间	   	: 2020-09-11 09:54
@@ -80,8 +80,8 @@ typedef int (*__compare_fn)(const void *, const void *);
     } name
 
 #define parnet(id)      ({ (id) >> 1; })
-#define __left(id)        ({ (id) << 1; })
-#define __right(id)       ({ ( (id) << 1 ) + 1; })
+#define left(id)        ({ (id) << 1; })
+#define right(id)       ({ ( (id) << 1 ) + 1; })
 
 /**
  * pqinit - 初始化有限队列
@@ -96,8 +96,7 @@ typedef int (*__compare_fn)(const void *, const void *);
 
 /**
  * max_henpify - 从根结点 i 向叶结点方向寻找 __heap[i] 值的恰当位置
- * @heap:      堆指针
- * @n:          堆中元素个数
+ * @heap:       堆指针
  * @root:       根节点
  */
 #define max_henpify(Q, root)    ({  \
@@ -107,12 +106,12 @@ typedef int (*__compare_fn)(const void *, const void *);
     int __left, __right, __largest;     \
 \
     for(; ;) {                          \
-        __left = __left(__root);        \
-        __right = __right(__root);      \
+        __left = left(__root);        \
+        __right = right(__root);      \
         __largest = __root;             \
 \
-        if ( (__left <= __n) && (__heap[__left] > __heap[__root]) ) __largest = __left;         \
-        if ( (__right <= __n) && (__heap[__right] > __heap[__largest]) ) __largest = __right;   \
+        if ( (__left  <= __n) && ( (Q)->__compare( (Q)->heap + __left,  (Q)->heap + __root    ) > 0) ) __largest = __left;    \
+        if ( (__right <= __n) && ( (Q)->__compare( (Q)->heap + __right, (Q)->heap + __largest ) > 0) ) __largest = __right;   \
 \
         if (__largest != __root) {      \
             swap(__heap + __root, __heap + __largest);  \
@@ -124,6 +123,7 @@ typedef int (*__compare_fn)(const void *, const void *);
 
 /**
  * pqpush - 向优先队列插入元素 
+ *     只有小于 0 才交换, 相同元素不进行交换
  * @heap:   优先队列指针
  * @key:    待插入值    
  */
@@ -155,5 +155,8 @@ typedef int (*__compare_fn)(const void *, const void *);
 
 /* pqclear - 清空优先队列 */
 #define pqclear(Q)          ({ free((Q)->heap); })
+
+/* pqis_empty - 判断优先队列是否为空 */
+#define pqis_empty(Q)          ({ (Q)->count == 0; })
 
 #endif	// __PQUEUE_H_
