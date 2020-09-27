@@ -72,10 +72,10 @@ Copyright © wkangk <wangkangchn@163.com>
  * @A:      待排序数组	
  * @num:    数组元素个数
  */
-#define trace(A, num, msg, ...) ({    \
+#define trace(A, num) ({    \
     for (int i = 0; i < (num); ++i) { \
         if (i > 0) printf(" ");     \
-        printf(msg, ##__VA_ARGS__);         \
+        printf("%d", (A)[i]);         \
     }                               \
     printf("\n");})
 

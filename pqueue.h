@@ -159,4 +159,7 @@ typedef int (*__compare_fn)(const void *, const void *);
 /* pqis_empty - 判断优先队列是否为空 */
 #define pqis_empty(Q)          ({ (Q)->count == 0; })
 
+/* pqsize - 获取优先队列元素个数 */
+#define pqsize(Q)          ({ (Q)->count; })
+
 #endif	// __PQUEUE_H_
