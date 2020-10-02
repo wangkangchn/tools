@@ -1,0 +1,4 @@
+
+sudo make clean
+sudo make graph_demo
+sudo ./app_graph_demo

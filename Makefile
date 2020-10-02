@@ -1,5 +1,8 @@
 CC = gcc -g
 
+graph_demo:
+	${CC} graph_demo.c -o app_graph_demo
+
 list_demo:
 	${CC} list_demo.c -o app_list_demo
 

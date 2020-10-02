@@ -3,7 +3,7 @@ Copyright © wkangk <wangkangchn@163.com>
 文件名		: graph.h
 作者	  	: wkangk <wangkangchn@163.com>
 版本	   	: v1.0
-描述	   	: 图
+描述	   	: 创建有向图, 当需要创建无向图时, 需要插入全部的边, 不会自动插入任何边
 时间	   	: 2020-09-27 09:10
 ***************************************************************/
 #ifndef __GRAPH_H__ 
@@ -11,10 +11,10 @@ Copyright © wkangk <wangkangchn@163.com>
 #include "tools.h"
 #include "list.h"
 
-#define iteration(count)    \
+#define __iteration__(count)    \
     for (size_t i = 0; i < count; ++i) 
 
-const int INFTY = (1 << 20);
+const int WEIGHT_INFTY = (1 << 20);
 
 typedef enum _vertex_state_ {
     NOT_VISIT,
@@ -70,7 +70,7 @@ typedef struct Edge {
  * @return: 无
  */
 #define clear_G(G, count)   ({  \
-    iteration( (count) )            \
+    __iteration__( (count) )            \
         clear_list(&(( (G) + i)->list));   \
 })
 
@@ -81,7 +81,7 @@ typedef struct Edge {
  * @return: 无
  */
 #define init(G, count) ({       \
-    iteration( (count) )          \
+    __iteration__( (count) )          \
         INIT_LIST_HEAD(&(( (G) + i)->list));    \
 })
 
@@ -97,7 +97,7 @@ typedef struct Edge {
     _adj_node_ *__node;             \
     for (__i = 0; __i < (n); ++__i)         \
         for (__j = 0; __j < (n); ++__j) {   \
-            __temp = INFTY;           \
+            __temp = WEIGHT_INFTY;           \
             if (__i == __j)             \
                 __temp = 0;           \
             *(((int *)(matrix) + __i * (n)) + __j) = __temp;  \
@@ -106,6 +106,61 @@ typedef struct Edge {
         list_for_each_entry(node, &(( (G) + __i)->list), list)   \
             *(((int *)(matrix) + __i * (n)) + node->id) = node->w;    \
 })
+
+
+/**
+ * matrix2list - 邻接矩阵转邻接表
+ * @matrix:     邻接矩阵	    
+ * @count:      图中顶点个数      
+ * @G:          保存邻接表 	
+ * @return: 无
+ */
+#define matrix2list(matrix, count, G) ({   \
+    int __i, __j;   \
+    int __w;    \
+    for (__i = 0; __i < (count); ++__i)  {  \
+        for (__j = 0; __j < (count); ++__j) {   \
+            __w = *(((int *)(matrix) + __i * (count)) + __j);   \
+            if (__w != WEIGHT_INFTY)    \
+                insert( (G), __i, __j, __w);    \
+        }   \
+    }   \
+})
+
+
+/**
+ * show_adj_list - 显示图的邻接表表示法
+ * @G:          图	(邻接表)
+ * @count:      图中顶点的个数	
+ * @return:     无
+ */
+#define show_adj_list(G, count) ({      \
+    _Vertex_ *__vertex;     \
+    _adj_node_ *__node;     \
+    for (int i = 0; i < (count); ++i) { \
+        printf("%d -> ", i);    \
+        list_for_each_entry(__node, &(((G) + i)->list), list) { \
+            printf("%d(%d) ", __node->id, __node->w);   \
+        }   \
+        printf("\n");   \
+    }   \
+})
+
+/**
+ * show_adj_matrix - 显示图的邻接矩阵表示法
+ * @G:          图	(邻接矩阵)
+ * @count:      图中顶点的个数	
+ * @return:     无
+ */
+#define show_adj_matrix(G, count) ({   \
+    int __i, __j;   \
+    for (__i = 0; __i < (count); ++__i)  {  \
+        for (__j = 0; __j < (count); ++__j)     \
+            printf("%d ", *(((int *)(G) + __i * (count)) + __j));   \
+        printf("\n");   \
+    }   \
+})
+
 
 
 // /**
