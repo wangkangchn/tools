@@ -70,7 +70,7 @@ typedef struct Edge {
  * @return: 无
  */
 #define clear_G(G, count)   ({  \
-    __iteration__( (count) )            \
+    for (size_t i = 0; i < count; ++i)    \
         clear_list(&(( (G) + i)->list));   \
 })
 

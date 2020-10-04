@@ -33,9 +33,6 @@ int main(int argc, char *argv[])
     int i, j;
     int n, e, s, t, w;
 
-    int vertex;
-    _adj_node_ *node;
-    
     scanf("%d %d", &n, &e);
 
     /* 1. 分配初始化图 */
