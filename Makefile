@@ -1,5 +1,7 @@
 CC = gcc -g
 
+bstree_demo:
+	${CC} bstree_demo.c -o app_bstree_demo
 graph_demo:
 	${CC} graph_demo.c -o app_graph_demo
 

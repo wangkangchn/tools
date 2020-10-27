@@ -1,0 +1,4 @@
+
+sudo make clean
+sudo make bstree_demo
+sudo ./app_bstree_demo

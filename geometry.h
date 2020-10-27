@@ -12,19 +12,28 @@ Copyright © wkangk <wangkangchn@163.com>
 #include <stdbool.h>
 #include "tools.h"
 
-#define EPSILON       (1e-12)  
+#define EPSILON       (1e-8)  
 
 /* 点与向量 */
 typedef struct Point {
     double x, y;
 } Point, Vector;
+/* 构造函数 */
+static inline Point cPoint(double x, double y)
+{
+    Point p = {
+        .x = x,
+        .y = y,
+    };
+    return p;
+}
 
 /* 线段与直线 */
 typedef struct Segment {
     Point p1, p2;
 } Segment, Line;
 
-#define show_point(p)   ({   printf("x: %f, y: %f\n", (p).x, (p).y); })   
+#define show_point(p)   ({   printf("x: %.10f, y: %.10f\n", (p).x, (p).y); })   
 
 /* 圆 */
 typedef struct Circle {
@@ -33,8 +42,9 @@ typedef struct Circle {
 } Circle;
 
 /* 多边形 */
-typedef struct Polygon {
+typedef struct {
     Point *pts;     /* 多边形用点的序列来表示 */
+    unsigned int count;  /* 边数 */
 } Polygon;
 
 /* 向量运算 */
@@ -74,7 +84,7 @@ typedef struct Polygon {
 
 /* 内积 */
 #define vdot(a, b)         ({  (a).x * (b).x + (a).y * (b).y;  })
-/* 外积, 返回表示向量 a x b大小的实数 */
+/* 外积, 返回表示向量 a x b 大小的实数 */
 #define vcross(a, b)       ({  (a).x * (b).y - (a).y * (b).x;  })
 
 /* 点线关系 */
@@ -88,10 +98,10 @@ typedef enum LOCATION {
 
 
 /**
- * ccw - 判断 p0, p1, p2 三个点的顺序
+ * ccw - 判断 p0, p1, p2 三个点的顺序, 判断 p2 与 p0, p1 的位置关系
  * @p0, p1, p2: 待计算点	
  * @return: 
- *       p0, p1, p2 成顺时针, 返回 CLOCKWISE
+ *       p0, p1, p2 成顺时针, 返回 CLOCKWISE 
  *       p0, p1, p2 成逆时针, 返回 COUNTER_CLOCKWISE
  *       p2, p0, p1 依次排列在同一条直线上(即 p2 位于 线段p0p1的左后方), 返回 ONLINE_BACK
  *       p0, p1, p2 依次排列在同一条直线上(即 p2 位于 线段p0p1的右前方), 返回 ONLINE_FRONT
@@ -182,5 +192,22 @@ static inline double distance_ss(Segment s1, Segment s2)
     }
     return 0.0;
 }
+
+
+/**
+ * projection - 点 p 在线段s上的投影
+ * @p:      点
+ * @s:      线段
+ * @return: 投影点坐标
+ */
+static inline Point projection(Point p, Segment s)
+{
+    Vector segment = vsub(s.p2, s.p1);      /* 线段的向量表示 */
+    double seg_length = vabs(segment);      /* 线段的长度 */
+    double t = vdot((vsub(p, s.p1)), segment) / seg_length;  /* 点 p 在线段上的投影长度 */
+    double r = t / seg_length;              /* 投影在线段所占的比例 */
+    return vadd(s.p1, vmul(segment, r));
+}
+
 
 #endif	/* !__GEOMETRY_H__ */
